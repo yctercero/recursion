@@ -5,14 +5,8 @@
 
 var stringifyJSON = function(obj) {
   if(typeof obj === "string" || typeof obj === "boolean" || typeof obj === "number"){
-    result = "'" + obj + "'";
+    return "'" + obj + "'";
   }
-
-  // var dict = {
-  //   true: "'true'",
-  //   false: "'false'",
-  //   number: 
-  // }
 
   var final;
 
@@ -20,12 +14,14 @@ var stringifyJSON = function(obj) {
     var result = reduce(obj, function(startVal, item, key){
       var str = "'" + key + "'";
       var startVal;
+      var recurse = false;
       if(typeof item === "object"){
-        //startVal = startVal[key];
+        recurse = true;
         startVal[key] = stringifyJSON(item);
         console.log("1:" + JSON.stringify(startVal));
         console.log("2:" + JSON.stringify(startVal[key]));
-        //startVal[key] = 
+        recurse = false;
+        return startVal;
       } else if(typeof item === "string"){
         item = "" + item + "";
       }
@@ -33,13 +29,17 @@ var stringifyJSON = function(obj) {
       startVal[str] = item;
       console.log("3:" + JSON.stringify(startVal));
       //console.log(startVal);
-      return startVal;
+      if(recurse === false){
+      	return startVal;
+      }
+      
     }, {})
+	console.log(result);
+  	return result;
   }
   
 
 
 
-  console.log(result);
-  return result;
+  
 };
