@@ -58,7 +58,7 @@ var parseJSON = function(json) {
   		}
 
   		// If encounter a number
-  		if(!isNaN(json[i]) && json[i] !== " " && json[i] !== "," && json[i] !== '"'){
+  		if(json[i] === "-" || !isNaN(json[i]) && json[i] !== " " && json[i] !== "," && json[i] !== '"'){
   			keyAt = i;
   			results.push(parseNum(results));
   			i = keyAt;
