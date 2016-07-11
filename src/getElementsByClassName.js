@@ -32,6 +32,7 @@ var getElementsByClassName = function(className){
   		// iterate through the list of children using each
   		_.each(childNodesList, function(item, key, collection){
   			// if the child node is an element, as childNodes includes ALL nodes
+  			// http://www.w3schools.com/jsref/prop_node_nodetype.asp
   			if(item.nodeType === 1){
   				// for each child call checkEls again
   				checkEls(results, className, item);
@@ -46,7 +47,7 @@ var getElementsByClassName = function(className){
   // to kick things off
   checkEls(results, className, document.body);
 
-
+  return results;
   //we're creating a function that takes in a class name as an argument
   //we want to get all the nodes/elements in the doc and traverse through them
   //we know we can get the body element with document.body
