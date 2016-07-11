@@ -9,10 +9,11 @@ var parseJSON = function(json) {
   var keyAt; //keep track of where in the string we are
   var stringLength = json.length;
 
-  each(json, function(item, key, collection){
+  _.each(json, function(item, key, collection){
 
   	if(item === "["){
-  		keyAt = key;
+  		keyAt = Number(key) + 1;
+  		results = [];
   		parseArray(results, keyAt);
   	}
 
@@ -21,40 +22,40 @@ var parseJSON = function(json) {
   //Object function
 
   // Array function
-  function parseArray(results, keyAt){
+  function parseArray(results){
   	for (var i = keyAt; i <= stringLength; i++) {
   		
-  		console.log(json[i]);
-  		keyAt = i;
-
   		if(json[i] === "]"){
-  			results = [];
   			return results;
   		}
 
-  		if(json[i] === '"'){
+  		if(json[i] !== " " && json[i] !== "," && json[i] === '"'){
+  			console.log("key before parseString called " + i);
   			results.push(parseString(results, keyAt));
+
+  			console.log("key after parseString called " + i);
   		}
 
   	}
   }
 
   // String function
-  function parseString(results, keyAt){
+  function parseString(results){
   	var str = "";
 	var initialKey = keyAt;
 
   	for (var i = keyAt + 1; i <= stringLength; i++) {
   		
-  		keyAt = i;
-
   		if(i !== initialKey && json[i] === '"'){
+  			// Before was just adding 1 to keyAt which was not making any difference
+  			keyAt += i;
   			return str;
   		}
 
-  		str += json[i];
-
-
+  		if(json[i] !== " " && json[i] !== "," && json[i] !== "" && json[i] !== '"'){
+  			str += json[i];
+  		}
+  		
   	}
 
   	return str;
