@@ -14,7 +14,7 @@ var parseJSON = function(json) {
   	if(item === "["){
   		keyAt = Number(key) + 1;
   		results = [];
-  		parseArray(results, keyAt);
+  		parseArray(results);
   	}
 
   });
@@ -59,9 +59,10 @@ var parseJSON = function(json) {
 
   		// if encounter a quotation mark, as to indicate a string
   		if(json[i] !== " " && json[i] !== "," && json[i] === '"'){
+  			keyAt = i;
   			console.log("key before parseString called " + i);
   			results.push(parseString(results, keyAt));
-
+  			i = keyAt;
   			console.log("key after parseString called " + i);
   		}
 
