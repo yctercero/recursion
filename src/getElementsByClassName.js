@@ -5,7 +5,25 @@
 
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className){
-  // your code here
+  // results will be the collection of elements with the matching class
+  var results = [];
+
+  // Before I'd been trying to call getElementsByClassName on itself, but this does
+  // not work, or did not work for me because each time the node it would be examining
+  // was whatever it had first been set to, which in my case was the body
+  var checkEls = function(className, node){
+  	var node = node || document.body;
+
+  	if(node.classList){
+  		if(node.classList.contains(className)){
+  			results.push(node);
+  		}
+  	}
+
+  	if(node.childNodes){
+  		each()
+  	}
+  }
  var element = document.body;
 
   var children = element.childNodes;
