@@ -11,32 +11,45 @@ var getElementsByClassName = function(className){
   // Before I'd been trying to call getElementsByClassName on itself, but this does
   // not work, or did not work for me because each time the node it would be examining
   // was whatever it had first been set to, which in my case was the body
-  var checkEls = function(className, node){
+  function checkEls(className, node){
   	var node = node || document.body;
 
+  	// if the node has classes on it...
   	if(node.classList){
+  		// check if one of those classes matches className
   		if(node.classList.contains(className)){
+  			// if it does, push that node into results
   			results.push(node);
   		}
   	}
 
-  	if(node.childNodes){
-  		each()
+  	// if the node has child elements...
+  	if(node.children){
+  		// collect the child elements
+  		var childNodesList = node.childNodes;
+  		// iterate through the list of children using each
+  		each(childNodesList, function(item, key, collection){
+  			if(item.nodeType === 1){
+  				checkEls(className, item);
+  			}
+  		})
   	}
   }
- var element = document.body;
 
-  var children = element.childNodes;
-  console.log(children);
-  var result = [];
+  return results;
+ // var element = document.body;
 
-  if(element.hasChildNodes()){
-    result.push("has child nodes");
-    return console.log(result);
-  } else{
-    result.push("does not have child nodes");
-    return console.log(result);
-  }
+ //  var children = element.childNodes;
+ //  console.log(children);
+ //  var result = [];
+
+ //  if(element.hasChildNodes()){
+ //    result.push("has child nodes");
+ //    return console.log(result);
+ //  } else{
+ //    result.push("does not have child nodes");
+ //    return console.log(result);
+ //  }
 
   //we're creating a function that takes in a class name as an argument
   //we want to get all the nodes/elements in the doc and traverse through them
