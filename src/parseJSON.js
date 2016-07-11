@@ -48,7 +48,7 @@ var parseJSON = function(json) {
   			console.log("After parseBoolean for t called: " + keyAt);
   		}
 
-  		//If looking like value could be false
+  		// If looking like value could be false
   		if(json[i] === "f"){
   			keyAt = i;
   			console.log("Before parseBoolean for f called: " + keyAt);
@@ -57,11 +57,18 @@ var parseJSON = function(json) {
   			console.log("After parseBoolean for f called: " + keyAt);
   		}
 
-  		// if encounter a quotation mark, as to indicate a string
+  		// If encounter a number
+  		if(!isNaN(json[i]) && json[i] !== " " && json[i] !== "," && json[i] !== '"'){
+  			keyAt = i;
+  			results.push(parseNum(results));
+  			i = keyAt;
+  		}
+
+  		// If encounter a quotation mark, as to indicate a string
   		if(json[i] !== " " && json[i] !== "," && json[i] === '"'){
   			keyAt = i;
   			console.log("key before parseString called " + i);
-  			results.push(parseString(results, keyAt));
+  			results.push(parseString(results));
   			i = keyAt;
   			console.log("key after parseString called " + i);
   		}
@@ -106,7 +113,7 @@ var parseJSON = function(json) {
   } //end parseNull()
 
 
-  //Boolean function
+  // Boolean function
   function parseBoolean(results){
   	var str = "";
 
@@ -127,6 +134,24 @@ var parseJSON = function(json) {
   		}
   	}
   } // end parseBoolean()
+
+
+  // Number function
+  function parseNum(results){
+  	var str = "";
+
+  	for (var i = keyAt; i <= stringLength; i++) {
+  		if(json[i] === "." || json[i] === "-" || !isNaN(json[i])){
+  			str += json[i];
+  			console.log("str in parseNum: " + str);
+  		}else{
+  			keyAt = i;
+  			return Number(str);
+  		}
+  	}
+
+  	
+  } // end parseNum()
 
 
   return results;
