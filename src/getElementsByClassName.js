@@ -48,13 +48,5 @@ var getElementsByClassName = function(className){
   checkEls(results, className, document.body);
 
   return results;
-  //we're creating a function that takes in a class name as an argument
-  //we want to get all the nodes/elements in the doc and traverse through them
-  //we know we can get the body element with document.body
-  //and all it's children with document.childNodes
 
-  //as we loop through the collection of elements we want to check 2 things:
-    //1 - does this parent element have the class we're looking for
-      //in which case we ant to add it to the results that will be returned
-    //2 - does it have any children we need to loop through again (recursion here)
 };
