@@ -13,7 +13,7 @@ var parseJSON = function(json) {
 
   	if(item === "["){
   		keyAt = key;
-  		parseArray(item, keyAt);
+  		parseArray(results, keyAt);
   	}
 
   });
@@ -21,20 +21,44 @@ var parseJSON = function(json) {
   //Object function
 
   // Array function
-  function parseArray(item, keyAt){
+  function parseArray(results, keyAt){
   	for (var i = keyAt; i <= stringLength; i++) {
   		
   		console.log(json[i]);
+  		keyAt = i;
 
   		if(json[i] === "]"){
   			results = [];
+  			return results;
   		}
-  		
+
+  		if(json[i] === '"'){
+  			results.push(parseString(results, keyAt));
+  		}
+
   	}
   }
 
   // String function
+  function parseString(results, keyAt){
+  	var str = "";
+	var initialKey = keyAt;
 
+  	for (var i = keyAt + 1; i <= stringLength; i++) {
+  		
+  		keyAt = i;
+
+  		if(i !== initialKey && json[i] === '"'){
+  			return str;
+  		}
+
+  		str += json[i];
+
+
+  	}
+
+  	return str;
+  }
 
   return results;
 };
