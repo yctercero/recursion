@@ -21,12 +21,13 @@ var getElementsByClassName = function(className){
   			// if it does, push that node into results
   			results.push(node);
 
-  			return results;
+  			// this commented out return was the issue I was having
+  			//return results;
   		}
   	}
 
   	// if the node has child elements...
-  	if(node.children){
+  	if(node.childNodes){
   		// collect the child elements
   		var childNodesList = node.childNodes;
   		// iterate through the list of children using each
@@ -38,8 +39,7 @@ var getElementsByClassName = function(className){
   				checkEls(results, className, item);
   			}
   		})
-  		// Before was returning results outside of this statement
-  		// which was one of the problems
+  		
   		return results;
   	}
   }
