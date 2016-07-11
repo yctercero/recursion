@@ -39,6 +39,23 @@ var parseJSON = function(json) {
   			console.log("After parseNull called: " + keyAt);
   		}
 
+  		// If looking like value could be true
+  		if(json[i] === "t"){
+  			keyAt = i;
+  			console.log("Before parseBoolean for t called: " + keyAt);
+  			results.push(Boolean(parseBoolean(results)));
+  			i = keyAt;
+  			console.log("After parseBoolean for t called: " + keyAt);
+  		}
+
+  		//If looking like value could be false
+  		if(json[i] === "f"){
+  			keyAt = i;
+  			console.log("Before parseBoolean for f called: " + keyAt);
+  			results.push(Boolean(parseBoolean(results)));
+  			i = keyAt;
+  			console.log("After parseBoolean for f called: " + keyAt);
+  		}
 
   		// if encounter a quotation mark, as to indicate a string
   		if(json[i] !== " " && json[i] !== "," && json[i] === '"'){
@@ -86,6 +103,30 @@ var parseJSON = function(json) {
   		}
   	}
   } //end parseNull()
+
+
+  //Boolean function
+  function parseBoolean(results){
+  	var str = "";
+
+  	// i < keyAt + 5 because that's max you'd need to check to know if true or false
+  	for (var i = keyAt; i < keyAt + 5; i++) {
+  		str += json[i];
+
+  		if(str === "true"){
+  			keyAt = i;
+  			console.log("key before parseBoolean returns for true: " + keyAt);
+  			return Number(1);
+  		}
+
+  		if(str === "false"){
+  			keyAt = i;
+  			console.log("key before parseBoolean returns for false: " + keyAt);
+  			return Number(0);
+  		}
+  	}
+  } // end parseBoolean()
+
 
   return results;
 };
