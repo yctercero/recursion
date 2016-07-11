@@ -25,10 +25,22 @@ var parseJSON = function(json) {
   function parseArray(results){
   	for (var i = keyAt; i <= stringLength; i++) {
   		
+  		// if empty array, just return empty array immediately
   		if(json[i] === "]"){
   			return results;
   		}
 
+  		// if looking like value could possibly be null
+  		if(json[i] === "n"){
+  			keyAt = i;
+  			console.log("Before parseNull called: " + keyAt);
+  			results.push(parseNull(results));
+  			i = keyAt;
+  			console.log("After parseNull called: " + keyAt);
+  		}
+
+
+  		// if encounter a quotation mark, as to indicate a string
   		if(json[i] !== " " && json[i] !== "," && json[i] === '"'){
   			console.log("key before parseString called " + i);
   			results.push(parseString(results, keyAt));
@@ -59,7 +71,21 @@ var parseJSON = function(json) {
   	}
 
   	return str;
-  }
+  } // end parseString()
+
+
+  // Null function
+  function parseNull(results){
+  	var str = "";
+
+  	for(var i = keyAt; i <= keyAt + 3; i++){
+  		str += json[i];
+  		if(str === "null"){
+  			keyAt = i;
+  			return null;
+  		}
+  	}
+  } //end parseNull()
 
   return results;
 };
