@@ -61,16 +61,8 @@ var parseJSON = function(json) {
         return parseString();
     }
 
-    if(currentChar === "n"){
-      return parseNull();
-    }
-
-    if(currentChar === "t"){
-      return parseBoolean();
-    }
-
-    if(currentChar === "f"){
-      return parseBoolean();
+    if(currentChar === "n" || currentChar === "t" || currentChar === "f"){
+      return parseUnique();
     }
 
     if(currentChar === "-" || !isNaN(currentChar)){
@@ -235,30 +227,23 @@ var parseJSON = function(json) {
   	return str;
   }; // end parseString()
 
-
   
-  function parseNull(results){
-  	// Null function
-  	this.test(currentChar === "n" , "currentChar should be n first time inside of parseNull" );
+  function parseUnique(results){
+  	// Boolean & Null function
+  	this.test(currentChar === "t" || currentChar === "f" || currentChar === "n", "currentChar should be f or t first time inside of parseBoolean, but is instead " + currentChar );
+  	
   	str = currentChar;
-  	while(str !== "null"){
-  		str += getNextChar();
+
+  	if(currentChar === "n"){
+  		while(str !== "null"){
+  			str += getNextChar();
+  		}
+
+  		this.test(currentChar === "l", "currentChar should be l when while loop ends inside parseBoolean" );
+  		
+  		getNextChar();
+  		return null;
   	}
-
-  	this.test(currentChar === "l" , "currentChar should be l when while loop ends inside parseNull" );
-  	
-  	getNextChar();
-  	return null;
-  }; //end parseNull()
-
-
-  
-  function parseBoolean(results){
-  	// Boolean function
-  	console.log("THE CURRENT IS " + currentChar);
-  	this.test(currentChar === "t" || currentChar === "f" , "currentChar should be f or t first time inside of parseBoolean, but is instead " + currentChar );
-  	
-  	str = currentChar;
 
   	if(currentChar === "t"){
   		while(str !== "true"){
