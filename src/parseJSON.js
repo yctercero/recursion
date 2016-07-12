@@ -2,6 +2,14 @@
 // var parseJSON = JSON.parse;
 
 // but you're not, so you'll write it from scratch:
+var test = function(claim, message) {
+	if (claim) {
+		return true;
+	} else {
+		throw message;
+	}
+};
+
 var parseJSON = function(json) {
   // Super helpful - http://ronfenolio.com/blog/2016/01/parsing-json/
 
@@ -22,10 +30,10 @@ var parseJSON = function(json) {
 
   	// Set the charachter we're at
   	currentChar = parseMe.charAt(currentIndex);
-
+  	console.log(currentChar);
   	// Move index one further, so next time getNextChar is called it grabs that char
   	currentIndex++
-
+  	console.log(currentIndex);
   	// Return the current charachter
   	return currentChar;
   };
@@ -117,13 +125,22 @@ var parseJSON = function(json) {
   
   function parseArray(){
   	// Array function
-  	getNextChar();
-
   	// What will ultimately be returned as result
   	var tempArr = [];
 
+  	this.test(currentChar === "[" , "currentChar should be [ inside of parseArray" );
+
+  	getNextChar();
+
+  	console.log("Inside parseArray: " + currentChar);
+
+  	if(currentChar === " "){
+  		parseWhiteSpace();
+  	}
+
   	// Check if we're dealing with an empty array
   	if(currentChar === "]"){
+  		this.test(currentChar === "]" , "currentChar should be ] to indicate an empty array");
   		getNextChar();
   		return tempArr;
   	}
@@ -255,7 +272,7 @@ var parseJSON = function(json) {
   	}
   } // end parseNum()
 
-  getNextChar(json, currentIndex);
+  results = getResult();
 
   return results;
 };
