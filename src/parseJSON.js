@@ -33,7 +33,6 @@ var parseJSON = function(json) {
   	console.log(currentChar);
   	// Move index one further, so next time getNextChar is called it grabs that char
   	currentIndex++
-  	console.log(currentIndex);
   	// Return the current charachter
   	return currentChar;
   };
@@ -145,9 +144,17 @@ var parseJSON = function(json) {
   		return tempArr;
   	}
 
-  	// If array has elements check elements
-  	console.log(parseElements());
-  	getNextChar(json, currentIndex);
+
+  	// If not an empty array...
+  	tempArr.push(getResult());
+
+  	if(currentChar === ","){
+  		getNextChar();
+  		tempArr.push(getResult());
+  	}
+
+  	return tempArr;
+  	//getNextChar(json, currentIndex);
 
   }
 
@@ -191,31 +198,29 @@ var parseJSON = function(json) {
     }
 
   }
-
+  var str = "";
   // String function
   function parseString(results){
-  	var str = "";
-	var initialKey = currentIndex;
-	var track = 0;
+  	
+  	getNextChar();
 
-  	for (var i = currentIndex + 1; i <= stringLength; i++) {
-  		
-  		if(i !== initialKey && json[i] === '"'){
-  			currentIndex += i;
-  			return str;
-  		}
+	console.log("current char inside parseString: " + currentChar);
 
-  		if(json[i] === '\"' && json[i + 1] === '\"'){
-	  		return '\"\"';
-	  	}
-
-  		if(json[i] !== " " && json[i] !== "," && json[i] !== "" && json[i] !== '"'){
-  			track = i;
-  			str += json[i];
-  		}  		
+	if(currentChar === " "){
+  		parseWhiteSpace();
   	}
-  	console.log("key " + currentIndex);
-	currentIndex += track;
+  		
+	if(currentChar === '"'){
+		this.test("currentChar should be ' indicating an empty string.");
+		getNextChar();
+		return str;
+	}
+	
+	str += currentChar; 	
+
+	//getNextChar();
+	parseString();
+	console.log("Before retrurning: " + currentChar);
   	return str;
   } // end parseString()
 
