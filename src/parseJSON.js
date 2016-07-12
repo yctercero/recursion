@@ -20,6 +20,7 @@ var parseJSON = function(json) {
   var stringLength = json.length;
   var key;
   var val;
+  var str = "";
 
   
   function getNextChar(){
@@ -148,11 +149,13 @@ var parseJSON = function(json) {
   	// If not an empty array...
   	tempArr.push(getResult());
 
+  	str = "";
   	if(currentChar === ","){
   		getNextChar();
   		tempArr.push(getResult());
   	}
 
+  	str = "";
   	return tempArr;
   	//getNextChar(json, currentIndex);
 
@@ -198,10 +201,9 @@ var parseJSON = function(json) {
     }
 
   }
-  var str = "";
-  // String function
+  
   function parseString(results){
-  	
+  	// String function
   	getNextChar();
 
 	console.log("current char inside parseString: " + currentChar);
