@@ -61,6 +61,18 @@ var parseJSON = function(json) {
         return parseString();
     }
 
+    if(currentChar === "n"){
+      return parseNull();
+    }
+
+    if(currentChar === "t"){
+      return parseBoolean();
+    }
+
+    if(currentChar === "f"){
+      return parseBoolean();
+    }
+
     if(currentChar === "-" || !isNaN(currentChar)){
       return parseNum();
     }
@@ -132,8 +144,6 @@ var parseJSON = function(json) {
 
   	getNextChar();
 
-  	console.log("Inside parseArray: " + currentChar);
-
   	if(currentChar === " "){
   		parseWhiteSpace();
   	}
@@ -145,21 +155,20 @@ var parseJSON = function(json) {
   		return tempArr;
   	}
 
-
   	// If not an empty array...
   	tempArr.push(getResult());
 
-  	str = "";
-  	if(currentChar === ","){
+  	
+  	while(currentChar === ","){
+  		str = "";
   		getNextChar();
   		tempArr.push(getResult());
+  		str = "";
   	}
 
-  	str = "";
+  	
   	return tempArr;
-  	//getNextChar(json, currentIndex);
-
-  }
+  };
 
   // Elements function
   function parseElements(){
@@ -224,44 +233,56 @@ var parseJSON = function(json) {
 	parseString();
 	console.log("Before retrurning: " + currentChar);
   	return str;
-  } // end parseString()
+  }; // end parseString()
 
 
-  // Null function
+  
   function parseNull(results){
-  	var str = "";
-
-  	for(var i = currentIndex; i <= currentIndex + 3; i++){
-  		str += json[i];
-  		if(str === "null"){
-  			currentIndex = i;
-  			return null;
-  		}
+  	// Null function
+  	this.test(currentChar === "n" , "currentChar should be n first time inside of parseNull" );
+  	str = currentChar;
+  	while(str !== "null"){
+  		str += getNextChar();
   	}
-  } //end parseNull()
+
+  	this.test(currentChar === "l" , "currentChar should be l when while loop ends inside parseNull" );
+  	
+  	getNextChar();
+  	return null;
+  }; //end parseNull()
 
 
-  // Boolean function
+  
   function parseBoolean(results){
-  	var str = "";
+  	// Boolean function
+  	console.log("THE CURRENT IS " + currentChar);
+  	this.test(currentChar === "t" || currentChar === "f" , "currentChar should be f or t first time inside of parseBoolean, but is instead " + currentChar );
+  	
+  	str = currentChar;
 
-  	// i < currentIndex + 5 because that's max you'd need to check to know if true or false
-  	for (var i = currentIndex; i < currentIndex + 5; i++) {
-  		str += json[i];
-
-  		if(str === "true"){
-  			currentIndex = i;
-  			console.log("key before parseBoolean returns for true: " + currentIndex);
-  			return Number(1);
+  	if(currentChar === "t"){
+  		while(str !== "true"){
+  			str += getNextChar();
   		}
 
-  		if(str === "false"){
-  			currentIndex = i;
-  			console.log("key before parseBoolean returns for false: " + currentIndex);
-  			return Number(0);
-  		}
+  		this.test(currentChar === "e", "currentChar should be e when while loop ends inside parseBoolean" );
+  		
+  		getNextChar();
+  		return true;
   	}
-  } // end parseBoolean()
+
+  	if(currentChar === "f"){
+  		while(str !== "false"){
+  			str += getNextChar();
+  		}
+
+   		this.test(currentChar === "e", "currentChar should be e when while loop ends inside parseBoolean" );
+  		
+  		getNextChar();
+  		return false;
+  	}
+
+  }; // end parseBoolean()
 
 
   // Number function
