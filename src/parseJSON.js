@@ -6,16 +6,26 @@ var parseJSON = function(json) {
   // Super helpful - http://ronfenolio.com/blog/2016/01/parsing-json/
 
   var results;
-  var keyAt; //keep track of where in the string we are
+  var currentIndex = 0; //keep track of where in the string we are
+  var currentChar;
   var stringLength = json.length;
+  var key;
+  var val;
 
   // Funcion gets next charachter
-  function getNext(string){
-  	for (var i = keyAt; i < string.length; i++) {
-  		keyAt = i;
+  function getNextChar(){
+  	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/charAt
+  	// Before I was doubling my work by trying to have one variable keeping tack of the index and then
+  	// Having to change i to that index every time, charAt means I can get rid of the loop here
 
-  		checkChar(json[keyAt]);
-  	}
+  	// Set the charachter we're at
+  	currentChar = json.charAt(currentIndex);
+
+  	// Move index one further, so next time getNextChar is called it grabs that char
+  	currentIndex++
+
+  	// Return the current charachter
+  	return currentChar;
   }
 
   // Function that checks whether array, object, or other
@@ -23,82 +33,110 @@ var parseJSON = function(json) {
   	if(char === "["){
         results = [];
         return parseArray();
-      } else if (char === "{"){
+    } else if (char === "{"){
         results = {};
         return parseObject();
-      } else{
+    } else{
         return parseElements();
-      }
+    }
   }
 
   //Object function
   function parseObject(){
-    keyAt++;
-    var isfirst = true;
-      if(json[keyAt] === "}"){
-        keyAt = keyAt + 1;
-        return {};
-      }
+  	
+    currentIndex++;
 
-    if(isfirst){
-      var key = parseElements();
-      isfirst = false;
-    }else{
-      var val = parseElements();
-    }
-    // If array has elements check elements
+    // if empty object
+	if(json[currentIndex] === "}"){
+	    currentIndex = currentIndex + 1;
+	    return {};
+	}
+
+	objHasPairs();
+	console.log("val here is " + val);
     results[key] = val; 
 
-    getNext(json, keyAt);
+    getNextChar(json, currentIndex);
   }
+
+  	// Object has Pairs
+  	function objHasPairs(){
+
+  		parsePair()
+  		console.log("val back here is " + val);
+	    console.log("key " + currentIndex);
+  		console.log("the next char would be: " + json[currentIndex] + " " + json[currentIndex + 1]);
+  	}
+
+  		// Pairs
+  		function parsePair(){
+  			var isfirst = true;
+
+	  		if(isfirst){
+		      key = parseString();
+		      
+		      isfirst = false;
+		      console.log("key " + currentIndex);
+		    }
+		    	
+		    	currentIndex++;
+		    	console.log("the currentIndex before val " + currentIndex + ", " + json[currentIndex]);
+		      val = parseElements();
+		      console.log("val is: " + val);
+		      
+  		}
 
   // Array function
   function parseArray(){
-  	keyAt++;
+  	currentIndex++;
 
-  	if(json[keyAt] === "]"){
-  		keyAt = keyAt + 1;
+  	if(json[currentIndex] === "]"){
+  		currentIndex = currentIndex + 1;
   		return [];
   	}
 
   	// If array has elements check elements
   	console.log(parseElements());
-  	getNext(json, keyAt);
+  	getNextChar(json, currentIndex);
 
   }
 
   // Elements function
   function parseElements(){
+  	console.log(json[currentIndex] + ", " + json[currentIndex + 1]);
+  	if(json[currentIndex] === '\"' && json[currentIndex + 1] === '\"'){
+  		return '\"\"';
+  	}
     // check if a string
-    if(json[keyAt] !== " " && json[keyAt] !== "," && json[keyAt] === '"'){
+    if(json[currentIndex] !== " " && json[currentIndex] !== "," && json[currentIndex] === '"'){
       return parseString();
     }
 
     // check if null
-    if(json[keyAt] === "n"){
+    if(json[currentIndex] === "n"){
       return parseNull();
     }
 
     // check if boolean
-    if(json[keyAt] === "t"){
+    if(json[currentIndex] === "t"){
       return Boolean(parseBoolean());
     }
 
-    if(json[keyAt] === "f"){
+    if(json[currentIndex] === "f"){
       return Boolean(parseBoolean());
     }
 
     //check if array
-    if(json[keyAt] === "[" || json[keyAt] === "]"){
+    if(json[currentIndex] === "[" || json[currentIndex] === "]"){
       return parseArray();
     }
 
-    if(json[keyAt] === "-" || !isNaN(json[keyAt]) && json[keyAt] !== " " && json[keyAt] !== "," && json[keyAt] !== '"'){
+    if(json[currentIndex] === "-" || !isNaN(json[currentIndex]) && json[currentIndex] !== " " && json[currentIndex] !== "," && json[currentIndex] !== '"'){
       return parseNum();
     }
 
     // check if object
-    if(json[keyAt] === "{"){
+    if(json[currentIndex] === "{"){
       return parseObject();
     }
 
@@ -107,25 +145,27 @@ var parseJSON = function(json) {
   // String function
   function parseString(results){
   	var str = "";
-	var initialKey = keyAt;
+	var initialKey = currentIndex;
 	var track = 0;
 
-  	for (var i = keyAt + 1; i <= stringLength; i++) {
+  	for (var i = currentIndex + 1; i <= stringLength; i++) {
   		
   		if(i !== initialKey && json[i] === '"'){
-  			keyAt += i;
+  			currentIndex += i;
   			return str;
   		}
+
+  		if(json[i] === '\"' && json[i + 1] === '\"'){
+	  		return '\"\"';
+	  	}
 
   		if(json[i] !== " " && json[i] !== "," && json[i] !== "" && json[i] !== '"'){
   			track = i;
   			str += json[i];
-  		}
-  		
-  		keyAt += track;
-  		return str;
+  		}  		
   	}
-
+  	console.log("key " + currentIndex);
+	currentIndex += track;
   	return str;
   } // end parseString()
 
@@ -134,10 +174,10 @@ var parseJSON = function(json) {
   function parseNull(results){
   	var str = "";
 
-  	for(var i = keyAt; i <= keyAt + 3; i++){
+  	for(var i = currentIndex; i <= currentIndex + 3; i++){
   		str += json[i];
   		if(str === "null"){
-  			keyAt = i;
+  			currentIndex = i;
   			return null;
   		}
   	}
@@ -148,19 +188,19 @@ var parseJSON = function(json) {
   function parseBoolean(results){
   	var str = "";
 
-  	// i < keyAt + 5 because that's max you'd need to check to know if true or false
-  	for (var i = keyAt; i < keyAt + 5; i++) {
+  	// i < currentIndex + 5 because that's max you'd need to check to know if true or false
+  	for (var i = currentIndex; i < currentIndex + 5; i++) {
   		str += json[i];
 
   		if(str === "true"){
-  			keyAt = i;
-  			console.log("key before parseBoolean returns for true: " + keyAt);
+  			currentIndex = i;
+  			console.log("key before parseBoolean returns for true: " + currentIndex);
   			return Number(1);
   		}
 
   		if(str === "false"){
-  			keyAt = i;
-  			console.log("key before parseBoolean returns for false: " + keyAt);
+  			currentIndex = i;
+  			console.log("key before parseBoolean returns for false: " + currentIndex);
   			return Number(0);
   		}
   	}
@@ -171,18 +211,18 @@ var parseJSON = function(json) {
   function parseNum(results){
   	var str = "";
 
-  	for (var i = keyAt; i <= stringLength; i++) {
+  	for (var i = currentIndex; i <= stringLength; i++) {
   		if(json[i] === "." || json[i] === "-" || !isNaN(json[i])){
   			str += json[i];
   			//console.log("str in parseNum: " + str);
   		}else{
-  			keyAt = i;
+  			currentIndex = i;
   			return Number(str);
   		}
   	}
   } // end parseNum()
 
-  getNext(json, keyAt);
+  getNextChar(json, currentIndex);
 
   return results;
 };
