@@ -7,7 +7,8 @@ var parseJSON = function(json) {
 
   var results;
   var currentIndex = 0; //keep track of where in the string we are
-  var currentChar;
+  var currentChar = " ";
+  var parseMe = json;
   var stringLength = json.length;
   var key;
   var val;
@@ -28,18 +29,25 @@ var parseJSON = function(json) {
   	return currentChar;
   }
 
-  // Function that checks whether array, object, or other
-  function checkChar(char){
-  	if(char === "["){
-        results = [];
+  // This should be the function to kick things off
+  function getResult(){
+  	if(currentChar === "["){
         return parseArray();
-    } else if (char === "{"){
-        results = {};
+    } 
+
+    else if (currentChar === "{"){
         return parseObject();
-    } else{
-        return parseElements();
+    } 
+
+    else if (currentChar === "\""){
+        return parseString();
     }
-  }
+
+    else if(currentChar === "-" || !isNaN(currentChar)){
+      return parseNum();
+    }
+
+  };
 
   //Object function
   function parseObject(){
