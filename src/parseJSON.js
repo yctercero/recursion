@@ -68,9 +68,6 @@ var parseJSON = function(json) {
     if(currentChar === "-" || !isNaN(currentChar)){
       return parseNum();
     }
-
-    
-
   };
 
   function parseWhiteSpace(){
@@ -78,8 +75,7 @@ var parseJSON = function(json) {
   	if(currentChar === " "){
   		return getNextChar();
   	}
-
-  }
+  };
 
   //Object function
   function parseObject(){
@@ -158,50 +154,9 @@ var parseJSON = function(json) {
   		str = "";
   	}
 
-  	
   	return tempArr;
   };
 
-  // Elements function
-  function parseElements(){
-  	console.log(json[currentIndex] + ", " + json[currentIndex + 1]);
-  	if(json[currentIndex] === '\"' && json[currentIndex + 1] === '\"'){
-  		return '\"\"';
-  	}
-    // check if a string
-    if(json[currentIndex] !== " " && json[currentIndex] !== "," && json[currentIndex] === '"'){
-      return parseString();
-    }
-
-    // check if null
-    if(json[currentIndex] === "n"){
-      return parseNull();
-    }
-
-    // check if boolean
-    if(json[currentIndex] === "t"){
-      return Boolean(parseBoolean());
-    }
-
-    if(json[currentIndex] === "f"){
-      return Boolean(parseBoolean());
-    }
-
-    //check if array
-    if(json[currentIndex] === "[" || json[currentIndex] === "]"){
-      return parseArray();
-    }
-
-    if(json[currentIndex] === "-" || !isNaN(json[currentIndex]) && json[currentIndex] !== " " && json[currentIndex] !== "," && json[currentIndex] !== '"'){
-      return parseNum();
-    }
-
-    // check if object
-    if(json[currentIndex] === "{"){
-      return parseObject();
-    }
-
-  }
   
   function parseString(results){
   	// String function
@@ -225,12 +180,12 @@ var parseJSON = function(json) {
 	parseString();
 	console.log("Before retrurning: " + currentChar);
   	return str;
-  }; // end parseString()
+  };
 
   
   function parseUnique(results){
   	// Boolean & Null function
-  	this.test(currentChar === "t" || currentChar === "f" || currentChar === "n", "currentChar should be f or t first time inside of parseBoolean, but is instead " + currentChar );
+  	this.test(currentChar === "t" || currentChar === "f" || currentChar === "n", "currentChar should be f or t first time inside of parseUnique, but is instead " + currentChar );
   	
   	str = currentChar;
 
@@ -239,7 +194,7 @@ var parseJSON = function(json) {
   			str += getNextChar();
   		}
 
-  		this.test(currentChar === "l", "currentChar should be l when while loop ends inside parseBoolean" );
+  		this.test(currentChar === "l", "currentChar should be l when while loop ends inside parseUnique, but is instead " + currentChar );
   		
   		getNextChar();
   		return null;
@@ -250,7 +205,7 @@ var parseJSON = function(json) {
   			str += getNextChar();
   		}
 
-  		this.test(currentChar === "e", "currentChar should be e when while loop ends inside parseBoolean" );
+  		this.test(currentChar === "e", "currentChar should be e when while loop ends inside parseUnique, but is instead " + currentChar );
   		
   		getNextChar();
   		return true;
@@ -261,29 +216,27 @@ var parseJSON = function(json) {
   			str += getNextChar();
   		}
 
-   		this.test(currentChar === "e", "currentChar should be e when while loop ends inside parseBoolean" );
+   		this.test(currentChar === "e", "currentChar should be e when while loop ends inside parseUnique, but is instead " + currentChar );
   		
   		getNextChar();
   		return false;
   	}
-
-  }; // end parseBoolean()
-
-
-  // Number function
+  };
+  
   function parseNum(results){
-  	var str = "";
+  	// Number function
+  	console.log("current CHAR " + currentChar);
+  	str = currentChar;
 
-  	for (var i = currentIndex; i <= stringLength; i++) {
-  		if(json[i] === "." || json[i] === "-" || !isNaN(json[i])){
-  			str += json[i];
-  			//console.log("str in parseNum: " + str);
-  		}else{
-  			currentIndex = i;
-  			return Number(str);
-  		}
+  	while(currentChar === "-" || currentChar === "." || typeof currentChar === "number"){
+  		str += getNextChar();
+  		console.log(str);
   	}
-  } // end parseNum()
+  		
+  	getNextChar();
+  	return Number(str);
+  };
+
 
   results = getResult();
 
