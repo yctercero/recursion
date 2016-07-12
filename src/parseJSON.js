@@ -9,90 +9,121 @@ var parseJSON = function(json) {
   var keyAt; //keep track of where in the string we are
   var stringLength = json.length;
 
-  _.each(json, function(item, key, collection){
+  // Funcion gets next charachter
+  function getNext(string){
+  	for (var i = keyAt; i < string.length; i++) {
+  		keyAt = i;
 
-  	if(item === "["){
-  		keyAt = Number(key) + 1;
-  		results = [];
-  		parseArray(results);
+  		checkChar(json[keyAt]);
   	}
+  }
 
-  });
+  // Function that checks whether array, object, or other
+  function checkChar(char){
+  	if(char === "["){
+        results = [];
+        return parseArray();
+      } else if (char === "{"){
+        results = {};
+        return parseObject();
+      } else{
+        return parseElements();
+      }
+  }
 
   //Object function
+  function parseObject(){
+    keyAt++;
+    var isfirst = true;
+      if(json[keyAt] === "}"){
+        keyAt = keyAt + 1;
+        return {};
+      }
+
+    if(isfirst){
+      var key = parseElements();
+      isfirst = false;
+    }else{
+      var val = parseElements();
+    }
+    // If array has elements check elements
+    results[key] = val; 
+
+    getNext(json, keyAt);
+  }
 
   // Array function
-  function parseArray(results){
-  	for (var i = keyAt; i <= stringLength; i++) {
-  		
-  		// if empty array, just return empty array immediately
-  		if(json[i] === "]"){
-  			return results;
-  		}
+  function parseArray(){
+  	keyAt++;
 
-  		// if looking like value could possibly be null
-  		if(json[i] === "n"){
-  			keyAt = i;
-  			console.log("Before parseNull called: " + keyAt);
-  			results.push(parseNull(results));
-  			i = keyAt;
-  			console.log("After parseNull called: " + keyAt);
-  		}
-
-  		// If looking like value could be true
-  		if(json[i] === "t"){
-  			keyAt = i;
-  			console.log("Before parseBoolean for t called: " + keyAt);
-  			results.push(Boolean(parseBoolean(results)));
-  			i = keyAt;
-  			console.log("After parseBoolean for t called: " + keyAt);
-  		}
-
-  		// If looking like value could be false
-  		if(json[i] === "f"){
-  			keyAt = i;
-  			console.log("Before parseBoolean for f called: " + keyAt);
-  			results.push(Boolean(parseBoolean(results)));
-  			i = keyAt;
-  			console.log("After parseBoolean for f called: " + keyAt);
-  		}
-
-  		// If encounter a number
-  		if(json[i] === "-" || !isNaN(json[i]) && json[i] !== " " && json[i] !== "," && json[i] !== '"'){
-  			keyAt = i;
-  			results.push(parseNum(results));
-  			i = keyAt;
-  		}
-
-  		// If encounter a quotation mark, as to indicate a string
-  		if(json[i] !== " " && json[i] !== "," && json[i] === '"'){
-  			keyAt = i;
-  			console.log("key before parseString called " + i);
-  			results.push(parseString(results));
-  			i = keyAt;
-  			console.log("key after parseString called " + i);
-  		}
-
+  	if(json[keyAt] === "]"){
+  		keyAt = keyAt + 1;
+  		return [];
   	}
+
+  	// If array has elements check elements
+  	console.log(parseElements());
+  	getNext(json, keyAt);
+
+  }
+
+  // Elements function
+  function parseElements(){
+    // check if a string
+    if(json[keyAt] !== " " && json[keyAt] !== "," && json[keyAt] === '"'){
+      return parseString();
+    }
+
+    // check if null
+    if(json[keyAt] === "n"){
+      return parseNull();
+    }
+
+    // check if boolean
+    if(json[keyAt] === "t"){
+      return Boolean(parseBoolean());
+    }
+
+    if(json[keyAt] === "f"){
+      return Boolean(parseBoolean());
+    }
+
+    //check if array
+    if(json[keyAt] === "[" || json[keyAt] === "]"){
+      return parseArray();
+    }
+
+    if(json[keyAt] === "-" || !isNaN(json[keyAt]) && json[keyAt] !== " " && json[keyAt] !== "," && json[keyAt] !== '"'){
+      return parseNum();
+    }
+
+    // check if object
+    if(json[keyAt] === "{"){
+      return parseObject();
+    }
+
   }
 
   // String function
   function parseString(results){
   	var str = "";
 	var initialKey = keyAt;
+	var track = 0;
 
   	for (var i = keyAt + 1; i <= stringLength; i++) {
   		
   		if(i !== initialKey && json[i] === '"'){
-  			// Before was just adding 1 to keyAt which was not making any difference
   			keyAt += i;
   			return str;
   		}
 
   		if(json[i] !== " " && json[i] !== "," && json[i] !== "" && json[i] !== '"'){
+  			track = i;
   			str += json[i];
   		}
   		
+  		keyAt += track;
+  		return str;
   	}
 
   	return str;
@@ -143,16 +174,15 @@ var parseJSON = function(json) {
   	for (var i = keyAt; i <= stringLength; i++) {
   		if(json[i] === "." || json[i] === "-" || !isNaN(json[i])){
   			str += json[i];
-  			console.log("str in parseNum: " + str);
+  			//console.log("str in parseNum: " + str);
   		}else{
   			keyAt = i;
   			return Number(str);
   		}
   	}
-
-  	
   } // end parseNum()
 
+  getNext(json, keyAt);
 
   return results;
 };
