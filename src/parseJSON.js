@@ -13,41 +13,61 @@ var parseJSON = function(json) {
   var key;
   var val;
 
-  // Funcion gets next charachter
+  
   function getNextChar(){
+  	// Funcion gets next charachter
   	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/charAt
   	// Before I was doubling my work by trying to have one variable keeping tack of the index and then
   	// Having to change i to that index every time, charAt means I can get rid of the loop here
 
   	// Set the charachter we're at
-  	currentChar = json.charAt(currentIndex);
+  	currentChar = parseMe.charAt(currentIndex);
 
   	// Move index one further, so next time getNextChar is called it grabs that char
   	currentIndex++
 
   	// Return the current charachter
   	return currentChar;
-  }
+  };
 
-  // This should be the function to kick things off
+  
   function getResult(){
+  // This should be the function to kick things off
+	
+	if(currentChar === " "){
+		// Want this first and don't want to return because if I add return
+		// here like with the others, the process would stop every time it hit
+		// a white space
+	    parseWhiteSpace();
+	}
+
   	if(currentChar === "["){
         return parseArray();
     } 
 
-    else if (currentChar === "{"){
+    if (currentChar === "{"){
         return parseObject();
     } 
 
-    else if (currentChar === "\""){
+    if (currentChar === "\""){
         return parseString();
     }
 
-    else if(currentChar === "-" || !isNaN(currentChar)){
+    if(currentChar === "-" || !isNaN(currentChar)){
       return parseNum();
     }
 
+    
+
   };
+
+  function parseWhiteSpace(){
+
+  	if(currentChar === " "){
+  		return getNextChar();
+  	}
+
+  }
 
   //Object function
   function parseObject(){
@@ -94,13 +114,18 @@ var parseJSON = function(json) {
 		      
   		}
 
-  // Array function
+  
   function parseArray(){
-  	currentIndex++;
+  	// Array function
+  	getNextChar();
 
-  	if(json[currentIndex] === "]"){
-  		currentIndex = currentIndex + 1;
-  		return [];
+  	// What will ultimately be returned as result
+  	var tempArr = [];
+
+  	// Check if we're dealing with an empty array
+  	if(currentChar === "]"){
+  		getNextChar();
+  		return tempArr;
   	}
 
   	// If array has elements check elements
