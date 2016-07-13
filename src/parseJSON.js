@@ -64,7 +64,6 @@ var parseJSON = function(json) {
     }
 
     if(currentChar === "-" || currentChar === "." || !isNaN(currentChar)){
-    	console.log("Char going into parseNum " + currentChar);
       return parseNum();
     }
   };
@@ -96,6 +95,10 @@ var parseJSON = function(json) {
   		return tempObj;
   	}
 
+  	while(currentChar !== "\""){
+  		getNextChar();
+  	}
+
 	key = parseString();
 
 	if(currentChar === ":"){
@@ -108,9 +111,9 @@ var parseJSON = function(json) {
 	}
 
 	while(currentChar === ","){
-		getNextChar();
-		if(currentChar === " "){
-	  		parseWhiteSpace();
+		this.test(currentChar === "," , "currentChar should be ',', but instead is " + currentChar);
+		while(currentChar !== "\""){
+	  		getNextChar();
 	  	}
 		key = parseString();
 		if(currentChar === ":"){
@@ -155,7 +158,6 @@ var parseJSON = function(json) {
   	// If not an empty array...
   	tempArr.push(getResult());
 
-  	console.log("NEXT CHAR IS " + currentChar);
   	while(currentChar === ","){
   		str = "";
   		getNextChar();
@@ -291,4 +293,5 @@ var parseJSON = function(json) {
   results = getResult();
 
   return results;
+  
 };
