@@ -123,6 +123,7 @@ var parseJSON = function(json) {
 		}
 	}
 
+	getNextChar();
 	return tempObj;
   };
 
@@ -154,7 +155,7 @@ var parseJSON = function(json) {
   	// If not an empty array...
   	tempArr.push(getResult());
 
-  	
+  	console.log("NEXT CHAR IS " + currentChar);
   	while(currentChar === ","){
   		str = "";
   		getNextChar();
