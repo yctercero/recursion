@@ -65,13 +65,14 @@ var parseJSON = function(json) {
       return parseUnique();
     }
 
-    if(currentChar === "-" || currentChar === "\." || !isNaN(currentChar)){
+    if(currentChar === "-" || currentChar === "." || !isNaN(currentChar)){
+    	console.log("Char going into parseNum " + currentChar);
       return parseNum();
     }
   };
 
   function parseWhiteSpace(){
-
+  	// Ignore white space (unless within string --> see parseString)
   	if(currentChar === " "){
   		return getNextChar();
   	}
@@ -162,30 +163,27 @@ var parseJSON = function(json) {
   	// String function
   	getNextChar();
 
-	//console.log("current char inside parseString: " + currentChar);
-
-	if(currentChar === " "){
-  		parseWhiteSpace();
+	// Within strings, don't want to ignore white space
+	if(currentChar === ""){
+  		str += " ";
   	}
 
-  	
-  		
+  	// Retrun empty string if next charachter after entering parseString is another "
 	if(currentChar === '"'){
 		this.test("currentChar should be ' indicating an empty string.");
 		getNextChar();
 		return str;
 	}
 	
+	// Check for escaping charachters
 	if(currentChar === "\\"){
   		str += parseEscape();
   	}else{
   		str += currentChar; 
   	}
 		
-
-	//getNextChar();
 	parseString();
-	//console.log("Before retrurning: " + currentChar);
+
   	return str;
   };
 
@@ -270,29 +268,22 @@ var parseJSON = function(json) {
   
   function parseNum(){
   	// Number function
-  	console.log("CURRENT CHAR IS " + currentChar);
-  	
-  	str = currentChar;
-  	console.log("CONSOLE STR " + str);
-	console.log("In parseNum");
-
+  	console.log("CONSOLE CHAR " + currentChar);
+  	//str = currentChar;
 	//getNextChar();
-
-	if(currentChar === "," || currentChar === " "){
-  		
+	console.log("CONSOLE STR " + str);
+	if(currentChar === "," || currentChar === " " || currentChar === "]" || currentChar === "}"){
+  		console.log("CONSOLE STR " + str);
   		//console.log(str);
   		return Number(str);
   		
-  	}
+  	} 
 
-  	str += getNextChar();
-	console.log("CONSOLE STR " + str);
+	str += currentChar;
 	getNextChar();
 	parseNum();
+	console.log("Str leaving parseNum is " + str);
 	return Number(str);
-	console.log("Charachter leaving here parseNum is " + currentChar);
-	
-
   };
 
 
