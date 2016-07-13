@@ -31,7 +31,7 @@ var parseJSON = function(json) {
 
   	// Set the charachter we're at
   	currentChar = parseMe.charAt(currentIndex);
-  	console.log(currentChar);
+  	//console.log(currentChar);
   	// Move index one further, so next time getNextChar is called it grabs that char
   	currentIndex++
   	// Return the current charachter
@@ -65,7 +65,7 @@ var parseJSON = function(json) {
       return parseUnique();
     }
 
-    if(currentChar === "-" || !isNaN(currentChar)){
+    if(currentChar === "-" || currentChar === "\." || !isNaN(currentChar)){
       return parseNum();
     }
   };
@@ -158,15 +158,17 @@ var parseJSON = function(json) {
   };
 
   
-  function parseString(results){
+  function parseString(){
   	// String function
   	getNextChar();
 
-	console.log("current char inside parseString: " + currentChar);
+	//console.log("current char inside parseString: " + currentChar);
 
 	if(currentChar === " "){
   		parseWhiteSpace();
   	}
+
+  	
   		
 	if(currentChar === '"'){
 		this.test("currentChar should be ' indicating an empty string.");
@@ -174,16 +176,59 @@ var parseJSON = function(json) {
 		return str;
 	}
 	
-	str += currentChar; 	
+	if(currentChar === "\\"){
+  		str += parseEscape();
+  	}else{
+  		str += currentChar; 
+  	}
+		
 
 	//getNextChar();
 	parseString();
-	console.log("Before retrurning: " + currentChar);
+	//console.log("Before retrurning: " + currentChar);
   	return str;
   };
 
+  function parseEscape(){
+  	this.test(currentChar === "\\", "currentChar should be a backslash, but is instead " + currentChar );
+  	
+  	getNextChar();
+
+  	if(currentChar === "\'"){
+  		return "\'";
+  	}
+
+  	if(currentChar === '\"'){
+  		return '\"';
+  	}
+
+  	if(currentChar === '\\'){
+  		return "\\";
+  	}
+
+  	if(currentChar === 'n'){
+  		return '\n';
+  	}
+
+  	if(currentChar === 'r'){
+  		return '\r';
+  	}
+
+  	if(currentChar === 't'){
+  		return '\t';
+  	}
+
+  	if(currentChar === 'b'){
+  		return '\b';
+  	}
+
+  	if(currentChar === 'f'){
+  		return '\f';
+  	}
+  };
+
   
-  function parseUnique(results){
+  function parseUnique(){
   	// Boolean & Null function
   	this.test(currentChar === "t" || currentChar === "f" || currentChar === "n", "currentChar should be f or t first time inside of parseUnique, but is instead " + currentChar );
   	
@@ -223,18 +268,31 @@ var parseJSON = function(json) {
   	}
   };
   
-  function parseNum(results){
+  function parseNum(){
   	// Number function
-  	console.log("current CHAR " + currentChar);
+  	console.log("CURRENT CHAR IS " + currentChar);
+  	
   	str = currentChar;
+  	console.log("CONSOLE STR " + str);
+	console.log("In parseNum");
 
-  	while(currentChar === "-" || currentChar === "." || typeof currentChar === "number"){
-  		str += getNextChar();
-  		console.log(str);
-  	}
+	//getNextChar();
+
+	if(currentChar === "," || currentChar === " "){
   		
-  	getNextChar();
-  	return Number(str);
+  		//console.log(str);
+  		return Number(str);
+  		
+  	}
+
+  	str += getNextChar();
+	console.log("CONSOLE STR " + str);
+	getNextChar();
+	parseNum();
+	return Number(str);
+	console.log("Charachter leaving here parseNum is " + currentChar);
+	
+
   };
 
 
