@@ -78,10 +78,21 @@ var parseJSON = function(json) {
   	}
   };
 
-  //Object function
+  
   function parseObject(){
-  	
-    currentIndex++;
+  	//Object function
+  	var tempObj = {};
+
+  	this.test(currentChar === "{" , "currentChar should be { inside of parseObject" );
+
+  	getNextChar();
+
+  	// Check if we're dealing with an empty object
+  	if(currentChar === "}"){
+  		this.test(currentChar === "}" , "currentChar should be } to indicate an empty object");
+  		getNextChar();
+  		return tempObj;
+  	}
 
     // if empty object
 	if(json[currentIndex] === "}"){
