@@ -18,8 +18,6 @@ var parseJSON = function(json) {
   var currentChar = " ";
   var parseMe = json;
   var stringLength = json.length;
-  var key;
-  var val;
   var str = "";
 
   
@@ -94,18 +92,29 @@ var parseJSON = function(json) {
   		return tempObj;
   	}
 
-    // if empty object
-	if(json[currentIndex] === "}"){
-	    currentIndex = currentIndex + 1;
-	    return {};
+  	var key;
+  	var val;
+
+	key = getResult();
+
+
+	console.log("key here is " + key);
+	console.log("currentChar here is " + currentChar);
+
+	if(currentChar === ":"){
+		str = "";
+		getNextChar();
+		val = getResult();
+		console.log("val here is " + val);
+		str = "";
 	}
 
-	objHasPairs();
-	console.log("val here is " + val);
-    results[key] = val; 
+	tempObj[key] = val;
 
-    getNextChar(json, currentIndex);
-  }
+
+
+	return tempObj;
+  };
 
   	// Object has Pairs
   	function objHasPairs(){
