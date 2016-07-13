@@ -38,7 +38,7 @@ unstringifiableValues = [
 parseableStrings = [
   // basic stuff
   '[]',
-  '{"foo": ""}',
+  '{"foo": "b"}',
   '{}',
   '{"foo": "bar"}',
   '["one", "two"]',
@@ -57,37 +57,37 @@ parseableStrings = [
 
   // escaping
   '["\\\\\\"\\"a\\""]',
-  '["and you can\'t escape thi\s"]'
+  '["and you can\'t escape thi\s"]',
 
   // everything all at once
-  // '{"CoreletAPIVersion":2,"CoreletType":"standalone",' +
-  //   '"documentation":"A corelet that provides the capability to upload' +
-  //   ' a folderâ€™s contents into a userâ€™s locker.","functions":[' +
-  //   '{"documentation":"Displays a dialog box that allows user to ' +
-  //   'select a folder on the local system.","name":' +
-  //   '"ShowBrowseDialog","parameters":[{"documentation":"The ' +
-  //   'callback function for results.","name":"callback","required":' +
-  //   'true,"type":"callback"}]},{"documentation":"Uploads all mp3 files' +
-  //   ' in the folder provided.","name":"UploadFolder","parameters":' +
-  //   '[{"documentation":"The path to upload mp3 files from."' +
-  //   ',"name":"path","required":true,"type":"string"},{"documentation":' +
-  //   ' "The callback function for progress.","name":"callback",' +
-  //   '"required":true,"type":"callback"}]},{"documentation":"Returns' +
-  //   ' the server name to the current locker service.",' +
-  //   '"name":"GetLockerService","parameters":[]},{"documentation":' +
-  //   '"Changes the name of the locker service.","name":"SetLockerSer' +
-  //   'vice","parameters":[{"documentation":"The value of the locker' +
-  //   ' service to set active.","name":"LockerService","required":true' +
-  //   ',"type":"string"}]},{"documentation":"Downloads locker files to' +
-  //   ' the suggested folder.","name":"DownloadFile","parameters":[{"' +
-  //   'documentation":"The origin path of the locker file.",' +
-  //   '"name":"path","required":true,"type":"string"},{"documentation"' +
-  //   ':"The Window destination path of the locker file.",' +
-  //   '"name":"destination","required":true,"type":"integer"},{"docum' +
-  //   'entation":"The callback function for progress.","name":' +
-  //   '"callback","required":true,"type":"callback"}]}],' +
-  //   '"name":"LockerUploader","version":{"major":0,' +
-  //   '"micro":1,"minor":0},"versionString":"0.0.1"}',
+  '{"CoreletAPIVersion":2,"CoreletType":"standalone",' +
+    '"documentation":"A corelet that provides the capability to upload' +
+    ' a folderâ€™s contents into a userâ€™s locker.","functions":[' +
+    '{"documentation":"Displays a dialog box that allows user to ' +
+    'select a folder on the local system.","name":' +
+    '"ShowBrowseDialog","parameters":[{"documentation":"The ' +
+    'callback function for results.","name":"callback","required":' +
+    'true,"type":"callback"}]},{"documentation":"Uploads all mp3 files' +
+    ' in the folder provided.","name":"UploadFolder","parameters":' +
+    '[{"documentation":"The path to upload mp3 files from."' +
+    ',"name":"path","required":true,"type":"string"},{"documentation":' +
+    ' "The callback function for progress.","name":"callback",' +
+    '"required":true,"type":"callback"}]},{"documentation":"Returns' +
+    ' the server name to the current locker service.",' +
+    '"name":"GetLockerService","parameters":[]},{"documentation":' +
+    '"Changes the name of the locker service.","name":"SetLockerSer' +
+    'vice","parameters":[{"documentation":"The value of the locker' +
+    ' service to set active.","name":"LockerService","required":true' +
+    ',"type":"string"}]},{"documentation":"Downloads locker files to' +
+    ' the suggested folder.","name":"DownloadFile","parameters":[{"' +
+    'documentation":"The origin path of the locker file.",' +
+    '"name":"path","required":true,"type":"string"},{"documentation"' +
+    ':"The Window destination path of the locker file.",' +
+    '"name":"destination","required":true,"type":"integer"},{"docum' +
+    'entation":"The callback function for progress.","name":' +
+    '"callback","required":true,"type":"callback"}]}],' +
+    '"name":"LockerUploader","version":{"major":0,' +
+    '"micro":1,"minor":0},"versionString":"0.0.1"}'
   // '{ "firstName": "John", "lastName" : "Smith", "age" : ' +
   //   '25, "address" : { "streetAddress": "21 2nd Street", ' +
   //   '"city" : "New York", "state" : "NY", "postalCode" : ' +
