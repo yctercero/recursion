@@ -268,21 +268,14 @@ var parseJSON = function(json) {
   
   function parseNum(){
   	// Number function
-  	console.log("CONSOLE CHAR " + currentChar);
-  	//str = currentChar;
-	//getNextChar();
-	console.log("CONSOLE STR " + str);
+
 	if(currentChar === "," || currentChar === " " || currentChar === "]" || currentChar === "}"){
-  		console.log("CONSOLE STR " + str);
-  		//console.log(str);
   		return Number(str);
-  		
   	} 
 
 	str += currentChar;
 	getNextChar();
 	parseNum();
-	console.log("Str leaving parseNum is " + str);
 	return Number(str);
   };
 
