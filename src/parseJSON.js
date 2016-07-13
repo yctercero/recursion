@@ -80,10 +80,14 @@ var parseJSON = function(json) {
   function parseObject(){
   	//Object function
   	var tempObj = {};
-
-  	this.test(currentChar === "{" , "currentChar should be { inside of parseObject" );
+  	var key;
+  	var val;
 
   	getNextChar();
+
+  	if(currentChar === " "){
+  		parseWhiteSpace();
+  	}
 
   	// Check if we're dealing with an empty object
   	if(currentChar === "}"){
@@ -92,56 +96,39 @@ var parseJSON = function(json) {
   		return tempObj;
   	}
 
-  	var key;
-  	var val;
-
-	key = getResult();
-
-
-	console.log("key here is " + key);
-	console.log("currentChar here is " + currentChar);
+	key = parseString();
 
 	if(currentChar === ":"){
+		this.test(currentChar === ":" , "currentChar should be :, but instead is " + currentChar);
 		str = "";
 		getNextChar();
 		val = getResult();
-		console.log("val here is " + val);
 		str = "";
+		tempObj[key] = val;
 	}
 
-	tempObj[key] = val;
-
-
+	while(currentChar === ","){
+		getNextChar();
+		if(currentChar === " "){
+	  		parseWhiteSpace();
+	  	}
+		key = parseString();
+		if(currentChar === ":"){
+			this.test(currentChar === ":" , "currentChar should be :, but instead is " + currentChar);
+			str = "";
+			getNextChar();
+			val = getResult();
+			str = "";
+			tempObj[key] = val;
+		}
+	}
 
 	return tempObj;
   };
 
-  	// Object has Pairs
-  	function objHasPairs(){
-
-  		parsePair()
-  		console.log("val back here is " + val);
-	    console.log("key " + currentIndex);
-  		console.log("the next char would be: " + json[currentIndex] + " " + json[currentIndex + 1]);
+  	function getKey(){
+  		return parseString();
   	}
-
-  		// Pairs
-  		function parsePair(){
-  			var isfirst = true;
-
-	  		if(isfirst){
-		      key = parseString();
-		      
-		      isfirst = false;
-		      console.log("key " + currentIndex);
-		    }
-		    	
-		    	currentIndex++;
-		    	console.log("the currentIndex before val " + currentIndex + ", " + json[currentIndex]);
-		      val = parseElements();
-		      console.log("val is: " + val);
-		      
-  		}
 
   
   function parseArray(){
