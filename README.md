@@ -1,3 +1,3 @@
 # Recursion
 
-An excercise completed in precourse as a student at Hack Reactor Remote.
+An exercise completed in precourse as a student at Hack Reactor Remote.
