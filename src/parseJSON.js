@@ -1,7 +1,3 @@
-// this is what you would do if you were one to do things the easy way:
-// var parseJSON = JSON.parse;
-
-// but you're not, so you'll write it from scratch:
 var test = function(claim, message) {
 	if (claim) {
 		return true;
@@ -11,8 +7,6 @@ var test = function(claim, message) {
 };
 
 var parseJSON = function(json) {
-  // Super helpful - http://ronfenolio.com/blog/2016/01/parsing-json/
-
   var results;
   var currentIndex = 0; //keep track of where in the string we are
   var currentChar = " ";
@@ -22,11 +16,6 @@ var parseJSON = function(json) {
 
   
   function getNextChar(){
-  	// Funcion gets next charachter
-  	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/charAt
-  	// Before I was doubling my work by trying to have one variable keeping tack of the index and then
-  	// Having to change i to that index every time, charAt means I can get rid of the loop here
-
   	// Set the charachter we're at
   	currentChar = parseMe.charAt(currentIndex);
   	//console.log(currentChar);
